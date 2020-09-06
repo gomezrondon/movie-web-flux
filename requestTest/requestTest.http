@@ -1,3 +1,7 @@
 GET http://localhost:8080/movie/list
 
 ###
+
+GET http://localhost:8080/movie/2
+
+###

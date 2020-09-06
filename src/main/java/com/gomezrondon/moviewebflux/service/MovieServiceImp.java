@@ -4,6 +4,7 @@ import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.repository.MovieRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class MovieServiceImp implements MovieService {
@@ -16,6 +17,11 @@ public class MovieServiceImp implements MovieService {
 
     @Override
     public Flux<Movie> getAllMovies() {
-        return repository.findAll();
+        return repository.findAll().log();
+    }
+
+    @Override
+    public Mono<Movie> findById(int id) {
+        return repository.findById(id).log();
     }
 }
