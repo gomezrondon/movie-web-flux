@@ -35,7 +35,15 @@ public class MovieServiceImp implements MovieService {
         return findById(movie.getId())
                 .map(movieFound -> movie.withId(movieFound.getId())) // setId returns void | withId return itself
                 .flatMap(repository::save)
-                .thenEmpty(Mono.empty());
-
+                .then();
+               //.thenEmpty(Mono.empty());
     }
+
+    @Override
+    public Mono<Void> delete(int id) {
+        return findById(id).flatMap(repository::delete)
+                .then();
+    }
+
+
 }

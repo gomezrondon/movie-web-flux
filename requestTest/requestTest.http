@@ -27,3 +27,9 @@ Content-Type: application/json
   "id": 8,
   "name": "Mortal Combat II"
 }
+
+###
+
+
+DELETE http://localhost:8080/movie/8
+Content-Type: application/json
