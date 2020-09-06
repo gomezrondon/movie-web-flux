@@ -9,3 +9,8 @@ logging:
       springframework:
         data:
           r2dbc: DEBUG
+
+server:
+  error:
+    include-stacktrace: on_param
+#http://localhost:8080/movie/55?trace=true (?trace flag returns the stacktrace)

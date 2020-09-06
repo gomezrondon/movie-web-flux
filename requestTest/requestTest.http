@@ -4,4 +4,8 @@ GET http://localhost:8080/movie/list
 
 GET http://localhost:8080/movie/2
 
+### not found
+
+GET http://localhost:8080/movie/55
+
 ###
