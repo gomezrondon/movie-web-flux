@@ -40,9 +40,10 @@ public class Application implements CommandLineRunner {
 				.flatMap(title -> Flux.just(new Movie(null, title)))
 				.flatMap(service::save);
 
-		service.deleteAll().subscribe(null, null, () -> movieFlux.subscribe(System.out::println));
-
-
+		Mono.just(service.deleteAll().subscribe())	// delete all records
+				.thenMany(movieFlux)  				// insert all records
+				.thenMany(service.findAll())  		// find all records
+				.subscribe(System.out::println);	// print all records
 
 	}
 }
