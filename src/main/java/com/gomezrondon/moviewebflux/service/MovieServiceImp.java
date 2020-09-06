@@ -16,7 +16,7 @@ public class MovieServiceImp implements MovieService {
     }
 
     @Override
-    public Flux<Movie> getAllMovies() {
+    public Flux<Movie> findAll() {
         return repository.findAll().log();
     }
 
@@ -43,6 +43,11 @@ public class MovieServiceImp implements MovieService {
     public Mono<Void> delete(int id) {
         return findById(id).flatMap(repository::delete)
                 .then();
+    }
+
+    @Override
+    public Mono<Void> deleteAll() {
+        return repository.deleteAll();
     }
 
 

@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface MovieService {
 
-    Flux<Movie> getAllMovies();
+    Flux<Movie> findAll();
 
     Mono<Movie> findById(int id);
 
@@ -15,4 +15,6 @@ public interface MovieService {
     Mono<Void> update(Movie movie);
 
     Mono<Void> delete(int id);
+
+    Mono<Void> deleteAll();
 }
