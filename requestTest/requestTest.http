@@ -9,3 +9,10 @@ GET http://localhost:8080/movie/2
 GET http://localhost:8080/movie/55
 
 ###
+
+POST http://localhost:8080/movie
+Content-Type: application/json
+
+{
+  "name": "Mortal Combat"
+}

@@ -24,4 +24,9 @@ public class MovieServiceImp implements MovieService {
     public Mono<Movie> findById(int id) {
         return repository.findById(id).log();
     }
+
+    @Override
+    public Mono<Movie> save(Movie movie) {
+        return repository.save(movie);
+    }
 }
