@@ -29,4 +29,13 @@ public class MovieServiceImp implements MovieService {
     public Mono<Movie> save(Movie movie) {
         return repository.save(movie);
     }
+
+    @Override
+    public Mono<Void> update(Movie movie) {
+        return findById(movie.getId())
+                .map(movieFound -> movie.withId(movieFound.getId())) // setId returns void | withId return itself
+                .flatMap(repository::save)
+                .thenEmpty(Mono.empty());
+
+    }
 }

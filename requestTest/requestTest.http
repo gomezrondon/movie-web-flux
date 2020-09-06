@@ -16,3 +16,14 @@ Content-Type: application/json
 {
   "name": "Mortal Combat"
 }
+
+###
+
+
+PUT http://localhost:8080/movie
+Content-Type: application/json
+
+{
+  "id": 8,
+  "name": "Mortal Combat II"
+}

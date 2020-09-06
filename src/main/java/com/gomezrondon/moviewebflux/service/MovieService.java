@@ -11,4 +11,6 @@ public interface MovieService {
     Mono<Movie> findById(int id);
 
     Mono<Movie> save(Movie movie);
+
+    Mono<Void> update(Movie movie);
 }
