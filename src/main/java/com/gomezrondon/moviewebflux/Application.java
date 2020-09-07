@@ -2,6 +2,7 @@ package com.gomezrondon.moviewebflux;
 
 import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.service.MovieService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -34,16 +35,14 @@ public class Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		List<String> list = List.of("Matrix", "Terminator", "RoboCop", "Alien II", "RoboCop2",
-				"Batman Begins ", "Matrix 2", "Transformers", "Limitless");
-		Flux<Movie> movieFlux = Flux.fromIterable(list)
-				.flatMap(title -> Flux.just(new Movie(null, title)))
+		Flux<Movie> movieFlux = Flux.just("Matrix", "Terminator", "RoboCop", "Alien II", "RoboCop2","Batman Begins ", "Matrix 2", "Transformers", "Limitless")
+				.map(title -> new Movie(null, title))
 				.flatMap(service::save);
 
-		Mono.just(service.deleteAll().subscribe())	// delete all records
-				.thenMany(movieFlux)  				// insert all records
-				.thenMany(service.findAll())  		// find all records
-				.subscribe(System.out::println);	// print all records
+		service.deleteAll()						// delete all records
+				.thenMany(movieFlux) 			 // insert all records
+				.thenMany(service.findAll()) 	// find all records
+				.subscribe(System.out::println); // print all records
 
 	}
 }
