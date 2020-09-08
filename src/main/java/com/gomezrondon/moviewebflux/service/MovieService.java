@@ -17,4 +17,6 @@ public interface MovieService {
     Mono<Void> delete(int id);
 
     Mono<Void> deleteAll();
+
+    Mono<Movie> findByTitle(String title);
 }

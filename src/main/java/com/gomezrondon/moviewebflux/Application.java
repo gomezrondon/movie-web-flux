@@ -36,6 +36,7 @@ public class Application implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		Flux<Movie> movieFlux = Flux.just("Matrix", "Terminator", "RoboCop", "Alien II", "RoboCop2","Batman Begins ", "Matrix 2", "Transformers", "Limitless")
+				.map(String::toLowerCase)
 				.map(title -> new Movie(null, title))
 				.flatMap(service::save);
 

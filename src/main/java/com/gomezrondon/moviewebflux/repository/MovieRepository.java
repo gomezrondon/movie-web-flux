@@ -9,4 +9,6 @@ import reactor.core.publisher.Mono;
 public interface MovieRepository extends ReactiveCrudRepository<Movie, Integer> {
 
     Mono<Movie> findById(int id);
+
+    Mono<Movie> findByName(String title);
 }

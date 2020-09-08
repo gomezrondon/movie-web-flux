@@ -40,6 +40,12 @@ public class MovieController {
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found")));
     }
 
+    @GetMapping("/title/{title}")
+    public Mono<Movie> getMovieByID(@PathVariable String title) {
+        return service.findByTitle(title)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found")));
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Movie> save(@Valid @RequestBody Movie movie) {

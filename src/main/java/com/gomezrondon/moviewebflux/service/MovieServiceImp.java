@@ -50,5 +50,10 @@ public class MovieServiceImp implements MovieService {
         return repository.deleteAll();
     }
 
+    @Override
+    public Mono<Movie> findByTitle(String title) {
+        return repository.findByName(title);
+    }
+
 
 }
