@@ -2,16 +2,14 @@ package com.gomezrondon.moviewebflux;
 
 import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.service.MovieService;
-import lombok.extern.slf4j.Slf4j;
+import io.r2dbc.spi.ConnectionFactory;
+import io.r2dbc.spi.Result;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
@@ -23,9 +21,11 @@ public class Application implements CommandLineRunner {
 */
 
 	private final MovieService service;
+	private final ConnectionFactory connectionFactory;
 
-	public Application(MovieService service) {
+	public Application(MovieService service, @Qualifier("connectionFactory") ConnectionFactory connectionFactory) {
 		this.service = service;
+		this.connectionFactory = connectionFactory;
 	}
 
 	public static void main(String[] args) {
@@ -35,14 +35,24 @@ public class Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		Flux<Movie> movieFlux = Flux.just("Matrix", "Terminator", "RoboCop", "Alien II", "RoboCop2","Batman Begins ", "Matrix 2", "Transformers", "Limitless")
-				.map(String::toLowerCase)
+		Flux<? extends Result> truncateTableMovie = Mono.from(connectionFactory.create())
+				.flatMapMany(connection -> connection
+						//.createStatement("ALTER TABLE movie AUTO_INCREMENT = 0")
+						.createStatement("Truncate table movie")
+						//.bind("$1", 300)
+						.execute());
+
+
+		Flux<Movie> movieFlux = Flux.just("Matrix", "Terminator", "RoboCop", "Alien II"
+					, "RoboCop2","Batman Begins ", "Matrix 2", "Transformers", "Limitless")
+ 				.map(String::toLowerCase)
 				.map(title -> new Movie(null, title))
 				.flatMap(service::save);
 
-		service.deleteAll()						// delete all records
+		truncateTableMovie // truncate table to reset id counter
+				.thenMany(service.deleteAll())	// delete all records
 				.thenMany(movieFlux) 			 // insert all records
-				.thenMany(service.findAll()) 	// find all records
+				//.thenMany(service.findAll()) 	// find all records
 				.subscribe(System.out::println); // print all records
 
 	}
