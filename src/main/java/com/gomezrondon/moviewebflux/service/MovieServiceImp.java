@@ -9,6 +9,8 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class MovieServiceImp implements MovieService {
@@ -71,6 +73,11 @@ public class MovieServiceImp implements MovieService {
     @Override
     public Mono<Movie> findByTitle(String title) {
         return repository.findByName(title);
+    }
+
+    @Override
+    public Flux<Movie> saveAll(List<Movie> movies) {
+        return repository.saveAll(movies);
     }
 
 

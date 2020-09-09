@@ -19,6 +19,21 @@ Content-Type: application/json
 
 ###
 
+###
+
+POST http://localhost:8080/movie/batch
+Content-Type: application/json
+
+[
+  {
+    "name": "karate kid"
+  },
+  {
+    "name": "Karate kid II"
+  }
+]
+
+###
 
 PUT http://localhost:8080/movie
 Content-Type: application/json

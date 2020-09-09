@@ -4,6 +4,8 @@ import com.gomezrondon.moviewebflux.entity.Movie;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 public interface MovieService {
 
     Flux<Movie> findAll();
@@ -19,4 +21,6 @@ public interface MovieService {
     Mono<Void> deleteAll();
 
     Mono<Movie> findByTitle(String title);
+
+    Flux<Movie> saveAll(List<Movie> movies);
 }

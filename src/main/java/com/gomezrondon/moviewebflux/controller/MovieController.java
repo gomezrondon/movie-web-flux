@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/movie")
@@ -51,6 +52,12 @@ public class MovieController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<Movie> save(@Valid @RequestBody Movie movie) {
         return service.save(movie);
+    }
+
+    @PostMapping("/batch")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Flux<Movie> batchSave( @RequestBody List<Movie> movies) {
+        return service.saveAll(movies);
     }
 
     @PutMapping
