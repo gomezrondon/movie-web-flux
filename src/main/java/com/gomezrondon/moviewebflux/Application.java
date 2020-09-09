@@ -8,17 +8,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import reactor.blockhound.BlockHound;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
- // esto genera un error Connection unexpectedly closed
-/*
+
 	static {
 		BlockHound.install();
 	}
-*/
 
 	private final MovieService service;
 	private final ConnectionFactory connectionFactory;
