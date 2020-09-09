@@ -3,6 +3,7 @@ package com.gomezrondon.moviewebflux.controller;
 
 import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.service.MovieService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/movie")
+@Slf4j
 public class MovieController {
 
     private final MovieService service;
@@ -36,8 +38,7 @@ public class MovieController {
 
     @GetMapping("/{id}")
     public Mono<Movie> getMovieByID(@PathVariable int id) {
-        return service.findById(id)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found")));
+        return service.findById(id);
     }
 
     @GetMapping("/title/{title}")

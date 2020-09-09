@@ -2,11 +2,15 @@ package com.gomezrondon.moviewebflux.service;
 
 import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.repository.MovieRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
+@Slf4j
 public class MovieServiceImp implements MovieService {
 
     private final MovieRepository repository;
@@ -22,7 +26,21 @@ public class MovieServiceImp implements MovieService {
 
     @Override
     public Mono<Movie> findById(int id) {
-        return repository.findById(id).log();
+
+/*        return  repository.findById(id).hasElement()
+                .flatMap(isEmpty -> {
+                    log.info(">>>>>>>>>>>>>>>>>>>> "+isEmpty);
+                    if (isEmpty) {
+                        return repository.findById(id);
+                    } else {
+                        return Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found"));
+                    }
+                });*/
+
+        return  repository.findById(id)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found")));
+
+
     }
 
     @Override
