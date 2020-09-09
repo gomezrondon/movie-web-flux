@@ -2,9 +2,11 @@ package com.gomezrondon.moviewebflux.service;
 
 import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.repository.MovieRepository;
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -23,7 +25,7 @@ public class MovieServiceImp implements MovieService {
 
     @Override
     public Flux<Movie> findAll() {
-        return repository.findAll().log();
+        return repository.findAll();
     }
 
     @Override
@@ -76,8 +78,21 @@ public class MovieServiceImp implements MovieService {
     }
 
     @Override
+    @Transactional
     public Flux<Movie> saveAll(List<Movie> movies) {
-        return repository.saveAll(movies);
+        // con validacion a priori
+        return Flux.fromIterable(movies)
+                .flatMap(this::validateMovie)
+                .thenMany(repository.saveAll(movies));
+    }
+
+
+    private Flux<Movie> validateMovie(Movie movie) {
+        if (StringUtil.isNullOrEmpty(movie.getName())) {
+            return Flux.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Name"));
+        } else {
+            return Flux.just(movie);
+        }
     }
 
 

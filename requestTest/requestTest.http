@@ -30,6 +30,9 @@ Content-Type: application/json
   },
   {
     "name": "Karate kid II"
+  },
+  {
+    "name": ""
   }
 ]
 
