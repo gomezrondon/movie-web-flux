@@ -1,33 +1,29 @@
 package com.gomezrondon.moviewebflux;
 
 import com.gomezrondon.moviewebflux.entity.Movie;
-import com.gomezrondon.moviewebflux.repository.MovieRepository;
 import com.gomezrondon.moviewebflux.service.MovieService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.server.ResponseStatusException;
-import reactor.blockhound.BlockHound;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = Application.class)
+@ExtendWith(SpringExtension.class)
 @Slf4j
 public class MovieServiceTest {
 
     @Autowired
     private MovieService myService;
 
+/*
     @BeforeAll
     static void initAll() {
         log.info("---Inside initAll---");
@@ -37,8 +33,9 @@ public class MovieServiceTest {
     @BeforeEach
     void init(TestInfo testInfo) throws InterruptedException {
         System.out.println("Start..." + testInfo.getDisplayName());
-        Thread.sleep(2000L); // necessary to allow the data to be inserted
+      //  Thread.sleep(2000L); // necessary to allow the data to be inserted
     }
+*/
 
     @Test
     @DisplayName("Testing gel all movies service")
@@ -85,3 +82,4 @@ public class MovieServiceTest {
 
 
 }
+

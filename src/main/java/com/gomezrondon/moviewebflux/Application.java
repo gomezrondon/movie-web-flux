@@ -4,6 +4,7 @@ import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.service.MovieService;
 import io.r2dbc.spi.ConnectionFactory;
 import io.r2dbc.spi.Result;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,12 +13,17 @@ import reactor.blockhound.BlockHound;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.List;
+
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
-	static {
+  // unit test does not work with blockhound
+/*	static {
 		BlockHound.install();
-	}
+	}*/
 
 	private final MovieService service;
 	private final ConnectionFactory connectionFactory;
@@ -41,18 +47,23 @@ public class Application implements CommandLineRunner {
 						//.bind("$1", 300)
 						.execute());
 
+		Flux<Movie> matrixMovie = getMovieFlux(List.of("Matrix"));
+		Flux<Movie> movieFlux = getMovieFlux(List.of("Terminator", "RoboCop", "Alien II", "RoboCop2","Batman Begins ", "Matrix 2", "Transformers", "Limitless"));
 
-		Flux<Movie> movieFlux = Flux.just("Matrix", "Terminator", "RoboCop", "Alien II"
-					, "RoboCop2","Batman Begins ", "Matrix 2", "Transformers", "Limitless")
- 				.map(String::toLowerCase)
-				.map(title -> new Movie(null, title))
-				.flatMap(service::save);
-
-		truncateTableMovie // truncate table to reset id counter
+ 		truncateTableMovie // truncate table to reset id counter
 				.thenMany(service.deleteAll())	// delete all records
+				.thenMany(matrixMovie) // to guaranty be the first
 				.thenMany(movieFlux) 			 // insert all records
 				//.thenMany(service.findAll()) 	// find all records
 				.subscribe(System.out::println); // print all records
 
+	}
+
+	@NotNull
+	private Flux<Movie> getMovieFlux(List<String> list) {
+		return Flux.fromIterable(list)
+				.map(String::toLowerCase)
+				.map(title -> new Movie(null, title))
+				.flatMap(service::save);
 	}
 }
