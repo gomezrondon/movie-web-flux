@@ -3,25 +3,21 @@ package com.gomezrondon.moviewebflux;
 import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.service.MovieService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.test.StepVerifier;
 
 @SpringBootTest(classes = Application.class)
-@ExtendWith(SpringExtension.class)
+//@ExtendWith(SpringExtension.class)
 @Slf4j
 public class MovieServiceTest {
 
     @Autowired
     private MovieService myService;
+
+
 
 /*
     @BeforeAll
@@ -36,6 +32,8 @@ public class MovieServiceTest {
       //  Thread.sleep(2000L); // necessary to allow the data to be inserted
     }
 */
+
+
 
     @Test
     @DisplayName("Testing gel all movies service")
@@ -61,24 +59,13 @@ public class MovieServiceTest {
 
         StepVerifier.create(myService.findById(99))
                 .expectSubscription()
-                .expectError(ResponseStatusException.class)
+                //.expectError(ResponseStatusException.class)
+                .expectErrorMessage("404 NOT_FOUND \"Movie not found\"")
                 .verify();
 
     }
 
-    @Test
-    @DisplayName("Web Test Client With Server URL")
-    public void test2() {
-        WebTestClient.bindToServer()
-                .baseUrl("http://localhost:8080"  )
-                .build()
-                .get()
-                .uri("/movie/2")
-                .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody();
-    }
+
 
 
 }
