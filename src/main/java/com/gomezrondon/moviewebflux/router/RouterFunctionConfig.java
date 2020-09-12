@@ -26,6 +26,7 @@ public class RouterFunctionConfig {
                 .andRoute(GET("/movie/{id}"), handlerFunction::getMovieByID)
                 .andRoute(GET("/movie/title/{title}"), handlerFunction::getMovieByTitle)
                 .andRoute(POST("/movie"), handlerFunction::save)
+                .andRoute(POST("/movie/batch"), handlerFunction::batchSave)
                 .andRoute(PUT("/movie"), handlerFunction::update)
                 .andRoute(DELETE("/movie/{id}"), handlerFunction::delete);
     }

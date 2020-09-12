@@ -7,14 +7,13 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.time.Duration;
+
 
 @Component
 public class HandlerFunction {
@@ -101,5 +100,13 @@ public class HandlerFunction {
     public Mono<ServerResponse> delete(ServerRequest serverRequest) {
         return ServerResponse.status(HttpStatus.NO_CONTENT)
                 .body(service.delete(Integer.parseInt(serverRequest.pathVariable("id"))), Movie.class );
+    }
+
+    @NotNull
+    public Mono<ServerResponse> batchSave(ServerRequest serverRequest) {
+        Flux<Movie> movieFlux = serverRequest.bodyToFlux(Movie.class);
+        return ServerResponse.status(HttpStatus.CREATED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(service.saveAll(movieFlux), Movie.class );
     }
 }

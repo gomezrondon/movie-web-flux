@@ -23,4 +23,6 @@ public interface MovieService {
     Mono<Movie> findByTitle(String title);
 
     Flux<Movie> saveAll(List<Movie> movies);
+
+    Flux<Movie> saveAll(Flux<Movie> movies);
 }

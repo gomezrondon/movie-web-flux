@@ -80,12 +80,23 @@ public class MovieServiceImp implements MovieService {
     @Override
     @Transactional
     public Flux<Movie> saveAll(List<Movie> movies) {
-        // con validacion a priori
+        // con validation a priori
         return Flux.fromIterable(movies)
                 .flatMap(this::validateMovie)
-                .thenMany(repository.saveAll(movies));
+                .flatMap(repository::save);
     }
 
+
+    @Override
+    @Transactional
+    public Flux<Movie> saveAll(Flux<Movie> movies) {
+
+        return repository.saveAll(movies.flatMap(this::validateMovie));
+
+
+        // con validation a priori
+       // return
+    }
 
     private Flux<Movie> validateMovie(Movie movie) {
         if (StringUtil.isNullOrEmpty(movie.getName())) {
