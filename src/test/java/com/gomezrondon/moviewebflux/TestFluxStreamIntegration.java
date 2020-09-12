@@ -30,7 +30,7 @@ public class TestFluxStreamIntegration {
     private final String baseUrl = "http://localhost:8080/movie";
 
     @Test
-    @DisplayName("Testing infinite /fluxstream endpoint V2")
+    @DisplayName("Testing infinite /infinite endpoint ")
     void test7()  {
 
         Flux<Integer> integerFlux = webClient.get()
@@ -40,10 +40,10 @@ public class TestFluxStreamIntegration {
                 .retryWhen(Retry.backoff(3, Duration.ofSeconds(5)))
                 .doOnError(IOException.class, e -> log.error(e.getMessage()));
 
-        Assertions.assertNotNull(integerFlux);
-
-        List<Integer> list = integerFlux.take(5).collectList().block();
-        Assertions.assertEquals(List.of(0, 1, 2, 3, 4), list);
+        StepVerifier.create(integerFlux)
+                .expectNext(0, 1, 2, 3, 4)
+                .thenCancel()
+                .verify();
     }
 
 
