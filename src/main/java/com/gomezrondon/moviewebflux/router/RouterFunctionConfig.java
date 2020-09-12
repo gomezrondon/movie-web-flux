@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.PUT;
 
 
 @Configuration
@@ -23,7 +25,9 @@ public class RouterFunctionConfig {
                 .andRoute(GET("/movie/list"), handlerFunction::getAllMovies)
                 .andRoute(GET("/movie/{id}"), handlerFunction::getMovieByID)
                 .andRoute(GET("/movie/title/{title}"), handlerFunction::getMovieByTitle)
-                .andRoute(POST("/movie"), handlerFunction::save);
+                .andRoute(POST("/movie"), handlerFunction::save)
+                .andRoute(PUT("/movie"), handlerFunction::update)
+                .andRoute(DELETE("/movie/{id}"), handlerFunction::delete);
     }
 
 

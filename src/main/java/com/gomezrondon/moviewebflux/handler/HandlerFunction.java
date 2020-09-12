@@ -85,9 +85,21 @@ public class HandlerFunction {
 
     @NotNull
     public Mono<ServerResponse> save(ServerRequest serverRequest) {
-
         return ServerResponse.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(serverRequest.bodyToMono(Movie.class).flatMap(service::save), Movie.class );
+    }
+
+    @NotNull
+    public Mono<ServerResponse> update(ServerRequest serverRequest) {
+        return ServerResponse.status(HttpStatus.NO_CONTENT)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(serverRequest.bodyToFlux(Movie.class).flatMap(service::update), Movie.class );
+    }
+
+    @NotNull
+    public Mono<ServerResponse> delete(ServerRequest serverRequest) {
+        return ServerResponse.status(HttpStatus.NO_CONTENT)
+                .body(service.delete(Integer.parseInt(serverRequest.pathVariable("id"))), Movie.class );
     }
 }

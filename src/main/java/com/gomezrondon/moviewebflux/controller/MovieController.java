@@ -87,15 +87,19 @@ public class MovieController {
         return service.saveAll(movies);
     }
 
+/*
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> update(@Valid @RequestBody Movie movie) {
         return service.update(movie);
     }
 
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> update(@PathVariable int id) {
+    public Mono<Void> delete(@PathVariable int id) {
         return service.delete(id);
     }
+    */
+
 }
