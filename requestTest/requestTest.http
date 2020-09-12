@@ -4,7 +4,14 @@ GET http://localhost:8080/movie/list
 
 GET http://localhost:8080/movie/2
 
+###  stream json
+
+GET http://localhost:8080/movie/fluxstream
+Accept: application/stream+json
+
+
 ### not found
+
 
 GET http://localhost:8080/movie/55
 

@@ -5,6 +5,7 @@ import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.service.MovieService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.time.Duration;
 import java.util.List;
 
 @RestController
@@ -30,6 +32,15 @@ public class MovieController {
 
     public MovieController(MovieService service) {
         this.service = service;
+    }
+
+
+    @GetMapping(value = "/fluxstream", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    public Flux<Integer> getFluxStream() {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(Long::intValue)
+                .take(5)
+                .log();
     }
 
     @GetMapping("/list")
