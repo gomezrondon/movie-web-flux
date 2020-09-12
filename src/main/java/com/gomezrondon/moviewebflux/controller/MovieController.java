@@ -35,6 +35,13 @@ public class MovieController {
     }
 
 
+    @GetMapping(value = "/infinite", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+    public Flux<Integer> getFluxStream2() {
+        return Flux.interval(Duration.ofSeconds(1))
+                .map(Long::intValue)
+                .log();
+    }
+
     @GetMapping(value = "/fluxstream", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<Integer> getFluxStream() {
         return Flux.interval(Duration.ofSeconds(1))
