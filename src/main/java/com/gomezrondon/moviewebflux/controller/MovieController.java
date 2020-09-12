@@ -4,6 +4,7 @@ package com.gomezrondon.moviewebflux.controller;
 import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.service.MovieService;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,8 +36,16 @@ public class MovieController {
     }
 
 
+/*
+// migrated to RouterFunctionConfig
     @GetMapping(value = "/infinite", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<Integer> getFluxStream2() {
+        return getInfinite();
+    }
+
+
+    @NotNull
+    private Flux<Integer> getInfinite() {
         return Flux.interval(Duration.ofSeconds(1))
                 .map(Long::intValue)
                 .log();
@@ -49,7 +58,7 @@ public class MovieController {
                 .take(5)
                 .log();
     }
-
+*/
     @GetMapping("/list")
     public Flux<Movie> getAllMovies() {
         return service.findAll();

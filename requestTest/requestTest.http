@@ -4,12 +4,6 @@ GET http://localhost:8080/movie/list
 
 GET http://localhost:8080/movie/2
 
-###  stream json
-
-GET http://localhost:8080/movie/fluxstream
-Accept: application/stream+json
-
-
 ### not found
 
 
@@ -62,5 +56,15 @@ Content-Type: application/json
 ###
 
 GET http://localhost:8080/movie/title/matrix
+
+###stream json
+
+GET http://localhost:8080/movie/fluxstream
+Accept: application/stream+json
+
+### stream json
+
+GET http://localhost:8080/movie/infinite
+Accept: application/stream+json
 
 ###
