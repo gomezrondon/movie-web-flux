@@ -58,7 +58,7 @@ public class MovieController {
                 .take(5)
                 .log();
     }
-*/
+
     @GetMapping("/list")
     public Flux<Movie> getAllMovies() {
         return service.findAll();
@@ -80,7 +80,7 @@ public class MovieController {
     public Mono<Movie> save(@Valid @RequestBody Movie movie) {
         return service.save(movie);
     }
-
+*/
     @PostMapping("/batch")
     @ResponseStatus(HttpStatus.CREATED)
     public Flux<Movie> batchSave( @RequestBody List<Movie> movies) {
