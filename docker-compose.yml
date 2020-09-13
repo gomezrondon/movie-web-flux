@@ -5,7 +5,7 @@ services:
     container_name: db
     image: mysql:5.7
     environment:
-      MYSQL_DATABASE: test
+      MYSQL_DATABASE: movie
       MYSQL_USER: roor
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root

@@ -40,17 +40,35 @@ public class Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		Flux<? extends Result> truncateTableMovie = Mono.from(connectionFactory.create())
+		Flux<? extends Result> dropTable = Mono.from(connectionFactory.create())
+				.flatMapMany(connection -> connection
+						.createStatement("drop table movie;")
+						.execute());
+
+
+		Flux<? extends Result> createTable = Mono.from(connectionFactory.create())
+				.flatMapMany(connection -> connection
+								.createStatement(
+										"" +
+												"create table movie\n" +
+										"(\n" +
+										"    id   int auto_increment  PRIMARY KEY,\n" +
+										"    name varchar(50) not null\n" +
+										");"
+								).execute());
+
+/*		Flux<? extends Result> truncateTableMovie = Mono.from(connectionFactory.create())
 				.flatMapMany(connection -> connection
 						//.createStatement("ALTER TABLE movie AUTO_INCREMENT = 0")
 						.createStatement("Truncate table movie")
 						//.bind("$1", 300)
-						.execute());
+						.execute());*/
 
 		Flux<Movie> matrixMovie = getMovieFlux(List.of("Matrix"));
 		Flux<Movie> movieFlux = getMovieFlux(List.of("Terminator", "RoboCop", "Alien II", "RoboCop2","Batman Begins ", "Matrix 2", "Transformers", "Limitless"));
 
- 		truncateTableMovie // truncate table to reset id counter
+		dropTable
+				.thenMany(createTable)
 				.thenMany(service.deleteAll())	// delete all records
 				.thenMany(matrixMovie) // to guaranty be the first
 				.thenMany(movieFlux) 			 // insert all records
