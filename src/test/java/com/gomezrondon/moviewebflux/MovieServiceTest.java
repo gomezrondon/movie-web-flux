@@ -36,6 +36,14 @@ public class MovieServiceTest {
 */
 
 
+    @Test
+    @DisplayName("test find by Name")
+    void test5()  {
+        StepVerifier.create(myService.findByTitle("RoboCop2"))
+                .expectSubscription()
+                .expectNextMatches(movie -> movie.getName().equals("RoboCop2".toLowerCase()))
+                .verifyComplete();
+    }
 
     @Test
     @DisplayName("Testing gel all movies service")
