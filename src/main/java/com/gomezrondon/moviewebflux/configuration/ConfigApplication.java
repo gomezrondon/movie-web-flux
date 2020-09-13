@@ -47,7 +47,7 @@ public class ConfigApplication {
             Flux<? extends Result> dropTable = Mono.from(connectionFactory.create())
                     .flatMapMany(connection -> connection
                             .createStatement("DROP TABLE IF EXISTS movie;")
-                         //   .createStatement("DROP TABLE movie;")
+                         //   .createStatement("DROP TABLE movie;") // for testing error handling
                             .execute());
 
 
@@ -71,8 +71,7 @@ public class ConfigApplication {
                     .thenMany(createTable.log("**Create table: "))
                     .onErrorResume(s ->{
                         log.info("inside on Error Resume");
-                        createTable.subscribe();
-                        return Flux.empty();
+                        return createTable.then(Mono.empty());
                     })
                       .thenMany(service.deleteAll())	// delete all records
                     .thenMany(movieFlux) 			 // insert all records
