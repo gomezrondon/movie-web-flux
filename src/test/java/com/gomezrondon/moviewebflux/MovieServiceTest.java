@@ -4,16 +4,21 @@ import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.service.MovieService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.test.StepVerifier;
 
+
 @SpringBootTest
-@ActiveProfiles("dev")
+@ExtendWith(SpringExtension.class)//@RunWith() // deprecated
 @DirtiesContext
-public class MovieServiceTest {
+@ActiveProfiles("test")
+public class MovieServiceTest  {
 
     @Autowired
     private MovieService myService;

@@ -1,6 +1,14 @@
 spring:
   profiles:
     active: dev
+
+---
+spring:
+  profiles: test
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/movie
+    username: root
+    password: root
 ---
 spring:
   profiles: dev
@@ -60,3 +68,4 @@ server:
     include-stacktrace: on_param
   port: 8082
 #http://localhost:8080/movie/55?trace=true (?trace flag returns the stacktrace)
+

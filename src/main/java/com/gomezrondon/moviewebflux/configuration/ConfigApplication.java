@@ -40,6 +40,41 @@ public class ConfigApplication {
         };
     }
 
+
+    @Bean
+    @Profile("test")
+    CommandLineRunner bootCLRTest(){
+        return args -> {
+            Flux<? extends Result> dropTable = Mono.from(connectionFactory.create())
+                    .flatMapMany(connection -> connection
+                            .createStatement("DROP TABLE IF EXISTS movie;")
+                            .execute());
+
+
+            Flux<? extends Result> createTable = Mono.from(connectionFactory.create())
+                    .flatMapMany(connection -> connection
+                            .createStatement(
+                                    "" +
+                                            "create table movie\n" +
+                                            "(\n" +
+                                            "    id   int auto_increment  PRIMARY KEY,\n" +
+                                            "    name varchar(50) not null\n" +
+                                            ");"
+                            ).execute());
+
+            Flux<Movie> movieFlux = getMovieFlux(List.of("Matrix","Terminator", "RoboCop", "Alien II", "RoboCop2","Batman Begins ", "Matrix 2", "Transformers", "Limitless"));
+
+            dropTable
+                    .thenMany(createTable)
+                    .thenMany(service.deleteAll())    // delete all records
+                    .thenMany(movieFlux)             // insert all records
+                    .doOnNext(System.out::println)
+                    .blockLast()//block to allow it to finish before the test cases start
+            ;
+        };
+    }
+
+
     @Bean
     @Profile("dev")
     CommandLineRunner bootCLR(){
@@ -76,9 +111,8 @@ public class ConfigApplication {
                     .thenMany(service.deleteAll())    // delete all records
                     .thenMany(movieFlux)             // insert all records
                     //.thenMany(service.findAll()) 	// find all records
-                    .doOnNext(System.out::println)
-                    .blockLast()//block to allow it to finish before the test cases start
-            ;
+                    .subscribe(System.out::println);
+
         };
     }
 
