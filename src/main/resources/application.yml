@@ -1,4 +1,9 @@
 spring:
+  profiles:
+    active: dev
+---
+spring:
+  profiles: dev
   r2dbc:
     url: r2dbc:mysql://localhost:3306/movie
     username: root
@@ -13,4 +18,45 @@ logging:
 server:
   error:
     include-stacktrace: on_param
+  port: 8080
+#http://localhost:8080/movie/55?trace=true (?trace flag returns the stacktrace)
+
+---
+spring:
+  profiles: prod
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/movie
+    username: root
+    password: root
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          r2dbc: INFO
+
+server:
+  error:
+    include-stacktrace: on_param
+  port: 8081
+#http://localhost:8080/movie/55?trace=true (?trace flag returns the stacktrace)
+
+---
+spring:
+  profiles: k8s
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/movie
+    username: root
+    password: root
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          r2dbc: INFO
+
+server:
+  error:
+    include-stacktrace: on_param
+  port: 8082
 #http://localhost:8080/movie/55?trace=true (?trace flag returns the stacktrace)
