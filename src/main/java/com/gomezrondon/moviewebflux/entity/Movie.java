@@ -27,4 +27,8 @@ public class Movie {
     @NotEmpty(message = "The name of the movie can not be empty")
     private String name;
 
+    public Movie(String title) {
+        this.name = title;
+        this.id = null;
+    }
 }

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @ExtendWith(SpringExtension.class)//@RunWith() // deprecated
 @DirtiesContext
 @AutoConfigureWebTestClient
-@ActiveProfiles("test")
+@ActiveProfiles("dev")
 public class MovieControllerTest  {
 
     @Autowired

@@ -17,7 +17,7 @@ import reactor.test.StepVerifier;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)//@RunWith() // deprecated
 @DirtiesContext
-@ActiveProfiles("test")
+@ActiveProfiles("dev")
 public class MovieServiceTest  {
 
     @Autowired
