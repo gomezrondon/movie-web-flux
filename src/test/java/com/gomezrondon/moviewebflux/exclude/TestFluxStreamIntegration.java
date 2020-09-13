@@ -1,9 +1,11 @@
-package com.gomezrondon.moviewebflux;
+package com.gomezrondon.moviewebflux.exclude;
 
-import lombok.extern.slf4j.Slf4j;
+
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -16,10 +18,10 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
-@Slf4j
+
 public class TestFluxStreamIntegration {
 
-
+    Logger log = org.slf4j.LoggerFactory.getLogger(TestFluxStreamIntegration.class);
     /***
      *  THE APPLICATION NEED TO BE RUNNING!!
      */
@@ -30,6 +32,7 @@ public class TestFluxStreamIntegration {
     @Test
     @DisplayName("Testing infinite /infinite endpoint ")
     void test7()  {
+
 
         Flux<Integer> integerFlux = webClient.get()
                 .uri(baseUrl+"/infinite")

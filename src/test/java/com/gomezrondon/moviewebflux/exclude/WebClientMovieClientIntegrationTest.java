@@ -1,4 +1,4 @@
-package com.gomezrondon.moviewebflux;
+package com.gomezrondon.moviewebflux.exclude;
 
 import com.gomezrondon.moviewebflux.controller.WebClientMovieClient;
 import com.gomezrondon.moviewebflux.entity.Movie;
@@ -10,12 +10,13 @@ import reactor.core.publisher.Mono;
 
 
 //@SpringBootTest(classes = Application.class) not working
+
 public class WebClientMovieClientIntegrationTest {
 
     private final WebClient webClient = WebClient.builder().build();
 
     @Test
-    @DisplayName("Should return the movie entity by name")
+     @DisplayName("Should return the movie entity by name")
     public void test1() throws InterruptedException {
 
         WebClientMovieClient webClientMovieClient = new WebClientMovieClient(webClient);
