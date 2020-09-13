@@ -2,9 +2,6 @@ package com.gomezrondon.moviewebflux;
 
 
 import com.gomezrondon.moviewebflux.entity.Movie;
-import com.gomezrondon.moviewebflux.service.MovieService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +12,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)//@RunWith() // deprecated

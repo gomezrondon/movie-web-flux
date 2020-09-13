@@ -13,27 +13,10 @@ import reactor.test.StepVerifier;
 @SpringBootTest
 @ActiveProfiles("dev")
 @DirtiesContext
-
 public class MovieServiceTest {
 
     @Autowired
     private MovieService myService;
-
-
-
-/*
-    @BeforeAll
-    static void initAll() {
-        log.info("---Inside initAll---");
-    //    BlockHound.install(); // there is an issue with mysql r2dbc
-    }
-
-    @BeforeEach
-    void init(TestInfo testInfo) throws InterruptedException {
-        System.out.println("Start..." + testInfo.getDisplayName());
-      //  Thread.sleep(2000L); // necessary to allow the data to be inserted
-    }
-*/
 
 
     @Test

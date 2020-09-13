@@ -67,16 +67,18 @@ public class ConfigApplication {
 
             dropTable
                     .log("**dropTable: ")
-                    .doOnError( e -> log.error("error message: {}",e.getMessage()))
+                    .doOnError(e -> log.error("error message: {}", e.getMessage()))
                     .thenMany(createTable.log("**Create table: "))
-                    .onErrorResume(s ->{
+                    .onErrorResume(s -> {
                         log.info("inside on Error Resume");
                         return createTable.then(Mono.empty());
                     })
-                      .thenMany(service.deleteAll())	// delete all records
-                    .thenMany(movieFlux) 			 // insert all records
+                    .thenMany(service.deleteAll())    // delete all records
+                    .thenMany(movieFlux)             // insert all records
                     //.thenMany(service.findAll()) 	// find all records
-                    .subscribe(System.out::println); // print all records
+                    .doOnNext(System.out::println)
+                    .blockLast()//block to allow it to finish before the test cases start
+            ;
         };
     }
 
