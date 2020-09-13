@@ -14,6 +14,8 @@ public interface MovieService {
 
     Mono<Movie> save(Movie movie);
 
+    Mono<Movie> insert(Movie movie);
+
     Mono<Void> update(Movie movie);
 
     Mono<Void> delete(int id);

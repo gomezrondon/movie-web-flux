@@ -46,8 +46,8 @@ public class ConfigApplication {
         return args -> {
             Flux<? extends Result> dropTable = Mono.from(connectionFactory.create())
                     .flatMapMany(connection -> connection
-                         //   .createStatement("DROP TABLE IF EXISTS movie;")
-                            .createStatement("DROP TABLE movie;")
+                            .createStatement("DROP TABLE IF EXISTS movie;")
+                         //   .createStatement("DROP TABLE movie;")
                             .execute());
 
 
@@ -63,12 +63,10 @@ public class ConfigApplication {
                             ).execute());
 
 
-            Flux<Movie> matrixMovie = getMovieFlux(List.of("Matrix"));
-            Flux<Movie> movieFlux = getMovieFlux(List.of("Matrix","Terminator", "RoboCop", "Alien II", "RoboCop2","Batman Begins ", "Matrix 2", "Transformers", "Limitless"));
+             Flux<Movie> movieFlux = getMovieFlux(List.of("Matrix","Terminator", "RoboCop", "Alien II", "RoboCop2","Batman Begins ", "Matrix 2", "Transformers", "Limitless"));
 
             dropTable
                     .log("**dropTable: ")
-
                     .doOnError( e -> log.error("error message: {}",e.getMessage()))
                     .thenMany(createTable.log("**Create table: "))
                     .onErrorResume(s ->{
@@ -77,7 +75,6 @@ public class ConfigApplication {
                         return Flux.empty();
                     })
                       .thenMany(service.deleteAll())	// delete all records
-                  //  .thenMany(matrixMovie) // to guaranty be the first
                     .thenMany(movieFlux) 			 // insert all records
                     //.thenMany(service.findAll()) 	// find all records
                     .subscribe(System.out::println); // print all records
@@ -90,9 +87,15 @@ public class ConfigApplication {
     private Flux<Movie> getMovieFlux(List<String> list) {
         return Flux.fromIterable(list)
                 .map(String::toLowerCase)
-
                 .map(title -> new Movie(null, title))
-                .flatMap(service::save);
+                .flatMap(movie -> {
+                    if (movie.getName().equals("matrix")) {
+                        movie.setId(1);
+                        return service.insert(movie);
+                    } else {
+                        return service.save(movie);
+                    }
+                });
     }
 
 }// fin de Config
