@@ -60,7 +60,8 @@ public class MovieServiceImp implements MovieService {
     @Override
     public Mono<Void> update(Movie movie) {
         return findById(movie.getId())
-                .map(movieFound -> movie.withId(movieFound.getId())) // setId returns void | withId return itself
+                //.log("update movie: "+movie.toString())
+                .map(movieFound -> movie) // setId returns void | withId return itself
                 .flatMap(repository::save)
                 .then();
                //.thenEmpty(Mono.empty());
