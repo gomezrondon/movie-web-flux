@@ -89,6 +89,16 @@ public class HandlerFunction {
                 .body(serverRequest.bodyToMono(Movie.class).flatMap(service::save), Movie.class );
     }
 
+
+/*    @NotNull // another way of doing it
+    public Mono<ServerResponse> save(ServerRequest serverRequest) {
+        Mono<Movie> movieMono = serverRequest.bodyToMono(Movie.class);
+
+        return movieMono.flatMap(movie -> ServerResponse.status(HttpStatus.CREATED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(service.save(movie), Movie.class));
+    }*/
+
     @NotNull
     public Mono<ServerResponse> update(ServerRequest serverRequest) {
         return ServerResponse.status(HttpStatus.NO_CONTENT)
