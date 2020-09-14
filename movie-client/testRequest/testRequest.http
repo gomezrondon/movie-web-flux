@@ -1,3 +1,8 @@
 ### GET request with a header
 GET http://localhost:8081/client/retrieve
 Accept: application/stream+json
+
+
+### GET one movie
+GET http://localhost:8081/client/retrieve/singlemovie/1
+Accept: application/stream+json
