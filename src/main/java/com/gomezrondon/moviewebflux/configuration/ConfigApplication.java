@@ -4,6 +4,7 @@ package com.gomezrondon.moviewebflux.configuration;
 import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.service.MovieService;
 import io.r2dbc.spi.ConnectionFactory;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationRunner;
@@ -41,17 +42,11 @@ public class ConfigApplication {
     ApplicationRunner applicationRunner(DatabaseClient dbc, MovieService service) {
         return args -> {
 
-            Flux<Movie> movieFlux = Flux.fromIterable(List.of("Matrix", "Terminator", "RoboCop", "Alien II", "RoboCop2", "Batman Begins ",
-                    "Matrix 2", "Transformers", "Limitless"))
-                    .map(String::toLowerCase)
-                    .map(Movie::new)
-                    .flatMap(movie -> {
-                        if (movie.getName().equals("matrix")) {
-                            return service.insert(movie.withId(1));
-                        } else {
-                            return service.save(movie);
-                        }
-                    });
+
+            Flux<Movie> firstMovie = insertMovieFlux(service, List.of("Matrix"));
+
+            List<String> movieList = List.of( "Terminator", "RoboCop", "Alien II", "RoboCop2", "Batman Begins ", "Matrix 2", "Transformers", "Limitless");
+            Flux<Movie> movieFlux = insertMovieFlux(service, movieList);
 
             Mono<Integer> dropTable = dbc.execute("DROP TABLE IF EXISTS movie;")
                     .fetch()
@@ -61,14 +56,29 @@ public class ConfigApplication {
                     .fetch()
                     .rowsUpdated();
 
-            dropTable
+            dropTable.log(">>>> drop table >>> ")
                     .then(createTable)
                     .thenMany(service.deleteAll())    // delete all records
+                    .thenMany(firstMovie)             // guaranty to be the first
                     .thenMany(movieFlux)             // insert all records
                     .doOnNext(System.out::println)
                     .blockLast(); // to allow records to be inserted before running test
 
         };
+    }
+
+    @NotNull
+    private Flux<Movie> insertMovieFlux(MovieService service, List<String> movieList) {
+        return Flux.fromIterable(movieList)
+                .map(String::toLowerCase)
+                .map(Movie::new)
+                .flatMap(movie -> {
+                    if (movie.getName().equals("matrix")) {
+                        return service.insert(movie.withId(1));
+                    } else {
+                        return service.save(movie);
+                    }
+                });
     }
 
 
