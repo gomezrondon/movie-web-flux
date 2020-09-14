@@ -2,9 +2,7 @@ package com.gomezrondon.moviewebflux;
 
 
 import com.gomezrondon.moviewebflux.entity.Movie;
-import com.gomezrondon.moviewebflux.service.MovieService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,13 +14,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 
 @SpringBootTest
@@ -108,8 +105,9 @@ public class MovieControllerTest  {
                 .expectBodyList(Movie.class)
                 .consumeWith(response -> {
                     List<Movie> movieList = response.getResponseBody();
+                    assert movieList != null;
                     movieList.forEach(movie -> {
-                        Assertions.assertTrue(movie.getId() != null);
+                        Assertions.assertNotNull(movie.getId());
                     });
                 });
     }
