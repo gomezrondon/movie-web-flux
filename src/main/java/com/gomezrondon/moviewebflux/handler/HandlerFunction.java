@@ -71,7 +71,10 @@ public class HandlerFunction {
                         .concatWith(Mono.error(new RuntimeException("RuntimeException Occurred.")))
                                 .doOnError( e -> log.error("error message: {}",e.getMessage())) // registro el error en el log
                         //el programa no exploto
-                                .onErrorReturn( new Movie(null,null)) // se recupero
+                                .onErrorResume(s ->{ //better way
+                                    log.info("inside on Error Resume");
+                                    return Mono.empty();
+                                })
                         , Movie.class );
     }
 
