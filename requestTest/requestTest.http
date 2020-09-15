@@ -1,4 +1,9 @@
+### get all movies
 GET http://localhost:8080/movie/list
+
+
+### get all movies + a Runtime Exception
+GET http://localhost:8080/movie/runtimeexception?trace=true
 
 ###
 

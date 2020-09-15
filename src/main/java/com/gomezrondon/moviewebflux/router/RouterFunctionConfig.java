@@ -23,6 +23,7 @@ public class RouterFunctionConfig {
                 .route(GET("/movie/infinite"), handlerFunction::getFluxStream2)
                 .andRoute(GET("/movie/fluxstream"), handlerFunction::getFluxStream)
                 .andRoute(GET("/movie/list"), handlerFunction::getAllMovies)
+                .andRoute(GET("/movie/runtimeexception"), handlerFunction::getRuntimeException)
                 .andRoute(GET("/movie/{id}"), handlerFunction::getMovieByID)
                 .andRoute(GET("/movie/title/{title}"), handlerFunction::getMovieByTitle)
                 .andRoute(POST("/movie"), handlerFunction::save)

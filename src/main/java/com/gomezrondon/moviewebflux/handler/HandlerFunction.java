@@ -3,6 +3,7 @@ package com.gomezrondon.moviewebflux.handler;
 
 import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.service.MovieService;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +17,7 @@ import java.time.Duration;
 
 
 @Component
+@Slf4j
 public class HandlerFunction {
 
     private final MovieService service;
@@ -60,6 +62,17 @@ public class HandlerFunction {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_STREAM_JSON)
                 .body(service.findAll(), Movie.class );
+    }
+
+    public Mono<ServerResponse> getRuntimeException(ServerRequest serverRequest) {
+        return ServerResponse.ok()
+                .contentType(MediaType.APPLICATION_STREAM_JSON)
+                .body(service.findAll()
+                        .concatWith(Mono.error(new RuntimeException("RuntimeException Occurred.")))
+                                .doOnError( e -> log.error("error message: {}",e.getMessage())) // registro el error en el log
+                        //el programa no exploto
+                                .onErrorReturn( new Movie(null,null)) // se recupero
+                        , Movie.class );
     }
 
     @NotNull
@@ -119,4 +132,6 @@ public class HandlerFunction {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(service.saveAll(movieFlux), Movie.class );
     }
+
+
 }
