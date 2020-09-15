@@ -41,8 +41,8 @@ public class MovieServiceImp implements MovieService {
                     }
                 });*/
 
-        return  repository.findById(id)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found")));
+        return repository.findById(id).log(">>>findById: ");
+             //   .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found")));
 
 
     }

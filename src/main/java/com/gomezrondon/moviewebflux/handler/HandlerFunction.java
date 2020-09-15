@@ -8,12 +8,15 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.time.Duration;
+
+import static org.springframework.web.reactive.function.BodyInserters.fromObject;
 
 
 @Component
@@ -64,25 +67,28 @@ public class HandlerFunction {
                 .body(service.findAll(), Movie.class );
     }
 
+    @NotNull
     public Mono<ServerResponse> getRuntimeException(ServerRequest serverRequest) {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_STREAM_JSON)
                 .body(service.findAll()
                         .concatWith(Mono.error(new RuntimeException("RuntimeException Occurred.")))
-                                .doOnError( e -> log.error("error message: {}",e.getMessage())) // registro el error en el log
+/*                                .doOnError( e -> log.error("error message: {}",e.getStackTrace())) // registro el error en el log
                         //el programa no exploto
                                 .onErrorResume(s ->{ //better way
                                     log.info("inside on Error Resume");
                                     return Mono.empty();
-                                })
-                        , Movie.class );
+                                })*/
+                        , Movie.class ).doOnError( e -> log.error("error message: {}",e.getStackTrace())) ;
     }
 
     @NotNull
     public Mono<ServerResponse> getMovieByID(ServerRequest serverRequest) {
-        return ServerResponse.ok()
-                .contentType(MediaType.APPLICATION_STREAM_JSON)
-                .body(service.findById(Integer.parseInt(serverRequest.pathVariable("id"))), Movie.class );
+        return service.findById(Integer.parseInt(serverRequest.pathVariable("id")))
+                .flatMap(movie -> ServerResponse.ok().contentType(MediaType.APPLICATION_STREAM_JSON)
+                        .body(BodyInserters.fromValue(movie)))
+               // .switchIfEmpty(ServerResponse.notFound().build()); // simple response 404 Not Found
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found"))); // full response
     }
 
     @NotNull
