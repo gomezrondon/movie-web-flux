@@ -57,9 +57,10 @@ public class MovieServiceTest  {
 
         StepVerifier.create(myService.findById(99))
                 .expectSubscription()
+                .expectNextCount(0)
                 //.expectError(ResponseStatusException.class)
-                .expectErrorMessage("404 NOT_FOUND \"Movie not found\"")
-                .verify();
+                //  .expectErrorMessage("404 NOT_FOUND \"Movie not found\"")
+                .verifyComplete();
 
     }
 

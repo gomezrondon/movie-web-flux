@@ -79,7 +79,7 @@ public class HandlerFunction {
                                     log.info("inside on Error Resume");
                                     return Mono.empty();
                                 })*/
-                        , Movie.class ).doOnError( e -> log.error("error message: {}",e.getStackTrace())) ;
+                        , Movie.class ).doOnError( e -> log.error("error message: {}",e.getMessage())) ;
     }
 
     @NotNull
