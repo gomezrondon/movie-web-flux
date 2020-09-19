@@ -30,21 +30,7 @@ public class MovieServiceImp implements MovieService {
 
     @Override
     public Mono<Movie> findById(int id) {
-
-/*        return  repository.findById(id).hasElement()
-                .flatMap(isEmpty -> {
-                    log.info(">>>>>>>>>>>>>>>>>>>> "+isEmpty);
-                    if (isEmpty) {
-                        return repository.findById(id);
-                    } else {
-                        return Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found"));
-                    }
-                });*/
-
         return repository.findById(id).log(">>>findById: ");
-             //   .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found")));
-
-
     }
 
     @Override

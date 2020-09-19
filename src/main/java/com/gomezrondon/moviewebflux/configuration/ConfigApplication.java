@@ -1,7 +1,9 @@
 package com.gomezrondon.moviewebflux.configuration;
 
 
+import com.gomezrondon.moviewebflux.entity.ItemCapped;
 import com.gomezrondon.moviewebflux.entity.Movie;
+import com.gomezrondon.moviewebflux.service.ItemService;
 import com.gomezrondon.moviewebflux.service.MovieService;
 import io.r2dbc.spi.ConnectionFactory;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +38,43 @@ public class ConfigApplication {
             System.out.println("This is TEst!");
         };
     }
+
+
+
+    @Bean
+    @Profile("mongo")
+    ApplicationRunner mongoApplicationRunner(ItemService service) {
+        return args -> {
+
+            Flux<ItemCapped> firstItem = insertItemsFlux(service, List.of("Matrix"));
+
+            List<String> movieList = List.of( "Terminator", "RoboCop", "Alien II", "RoboCop2", "Batman Begins ", "Matrix 2", "Transformers", "Limitless");
+            Flux<ItemCapped> itemsFlux = insertItemsFlux(service, movieList);
+
+            service.deleteAll()    // delete all records
+                    .thenMany(firstItem)             // guaranty to be the first
+                    .thenMany(itemsFlux)             // insert all records
+                    .subscribe(System.out::println);
+
+        };
+    }
+
+
+    @NotNull
+    private Flux<ItemCapped> insertItemsFlux(ItemService itemService, List<String> itemList) {
+        return Flux.fromIterable(itemList)
+                .map(String::toLowerCase)
+                .map(description -> new ItemCapped(null,description, 99.9))
+                .flatMap(item -> {
+                    if (item.getDescription().equals("matrix")) {
+                        return itemService.save(item);
+                    } else {
+                        return itemService.save(item);
+                    }
+                });
+    }
+
+
 
     @Bean
     @Profile("dev")

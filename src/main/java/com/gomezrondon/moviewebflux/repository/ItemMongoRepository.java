@@ -1,9 +1,9 @@
 package com.gomezrondon.moviewebflux.repository;
 
 import com.gomezrondon.moviewebflux.entity.ItemCapped;
-import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-interface ItemMongoRepository extends ReactiveCrudRepository<ItemCapped, String> {
+public interface ItemMongoRepository extends ReactiveMongoRepository<ItemCapped, String> {
 }
