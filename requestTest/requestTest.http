@@ -7,7 +7,7 @@ GET http://localhost:8080/movie/runtimeexception?trace=true
 
 ###
 
-GET http://localhost:8080/movie/2
+GET http://localhost:8080/movie/5f66974930d82033c06c94b4
 
 ### not found
 
@@ -20,7 +20,7 @@ POST http://localhost:8080/movie
 Content-Type: application/json
 
 {
-  "name": "Mortal Combat"
+  "title": "Mortal Combat"
 }
 
 ###
@@ -38,7 +38,7 @@ Content-Type: application/json
     "name": "Karate kid II"
   },
   {
-    "name": ""
+    "name": "pepe"
   }
 ]
 
@@ -48,7 +48,7 @@ PUT http://localhost:8080/movie
 Content-Type: application/json
 
 {
-  "id": 8,
+  "id": "5f66974930d82033c06c94b4",
   "name": "Mortal Combat II"
 }
 

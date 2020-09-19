@@ -1,17 +1,29 @@
 package com.gomezrondon.moviewebflux.service;
 
-import com.gomezrondon.moviewebflux.entity.MovieMongo;
+import com.gomezrondon.moviewebflux.entity.Movie;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 public interface MovieMongoService {
-    Flux<MovieMongo> findAll();
+    Flux<Movie> findAll();
 
-    Mono<MovieMongo> findById(String id);
+    Mono<Movie> findById(String id);
 
-    Mono<MovieMongo> save(MovieMongo movie);
+    Mono<Movie> save(Movie movie);
 
-    Mono<MovieMongo> insert(MovieMongo movie);
+    Mono<Movie> insert(Movie movie);
+
+    Mono<Void> update(Movie movie);
+
+    Mono<Void> delete(int id);
 
     Mono<Void> deleteAll();
+
+    Mono<Movie> findByTitle(String title);
+
+    Flux<Movie> saveAll(List<Movie> movies);
+
+    Flux<Movie> saveAll(Flux<Movie> movies);
 }

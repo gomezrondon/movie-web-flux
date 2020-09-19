@@ -3,10 +3,9 @@ package com.gomezrondon.moviewebflux.configuration;
 
 import com.gomezrondon.moviewebflux.entity.ItemCapped;
 import com.gomezrondon.moviewebflux.entity.Movie;
-import com.gomezrondon.moviewebflux.entity.MovieMongo;
 import com.gomezrondon.moviewebflux.service.ItemService;
 import com.gomezrondon.moviewebflux.service.MovieMongoService;
-import com.gomezrondon.moviewebflux.service.MovieService;
+
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.ApplicationRunner;
@@ -14,9 +13,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.r2dbc.core.DatabaseClient;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
 
 import java.util.List;
 
@@ -42,34 +40,34 @@ public class ConfigApplication {
 //-------------- mongo Reactive --------------
 
     @Bean
-    @Profile("mongo")
-    ApplicationRunner mongoApplicationRunner2(MovieMongoService service) {
+    ApplicationRunner movieMongoApplicationRunner2(MovieMongoService service) {
         return args -> {
 
-            Flux<MovieMongo> firstItem = insertMovieMongoFlux(service, List.of("Matrix"));
+            Flux<Movie> firstItem = insertMovieMongoFlux(service, List.of("Matrix"));
 
             List<String> movieList = List.of( "Terminator", "RoboCop", "Alien II", "RoboCop2", "Batman Begins ", "Matrix 2", "Transformers", "Limitless");
-            Flux<MovieMongo> itemsFlux = insertMovieMongoFlux(service, movieList);
+            Flux<Movie> itemsFlux = insertMovieMongoFlux(service, movieList);
 
             service.deleteAll()    // delete all records
                     .thenMany(firstItem)             // guaranty to be the first
                     .thenMany(itemsFlux)             // insert all records
                     .thenMany(service.findAll())
-                    .subscribe(System.out::println);
+                    .doOnNext(System.out::println)
+                    .blockLast();
 
         };
     }
 
     @NotNull
-    private Flux<MovieMongo> insertMovieMongoFlux(MovieMongoService service, List<String> movieList) {
+    private Flux<Movie> insertMovieMongoFlux(MovieMongoService service, List<String> movieList) {
         return Flux.fromIterable(movieList)
                 .map(String::toLowerCase)
-                .map(MovieMongo::new)
+                .map(Movie::new)
                 .flatMap(service::save);
     }
 
+/*
     @Bean
-    @Profile("mongo")
     ApplicationRunner mongoApplicationRunner(ItemService service) {
         return args -> {
 
@@ -81,10 +79,12 @@ public class ConfigApplication {
             service.deleteAll()    // delete all records
                     .thenMany(firstItem)             // guaranty to be the first
                     .thenMany(itemsFlux)             // insert all records
-                    .subscribe(System.out::println);
+                    .doOnNext(System.out::println)
+                    .blockLast();
 
         };
     }
+*/
 
 
     @NotNull
@@ -101,6 +101,7 @@ public class ConfigApplication {
                 });
     }
 
+/*
 
     //---------------- mydql r2dbc -----------------
 
@@ -150,6 +151,7 @@ public class ConfigApplication {
                     }
                 });
     }
+*/
 
 
 }// fin de Config

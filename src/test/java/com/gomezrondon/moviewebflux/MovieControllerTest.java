@@ -26,7 +26,7 @@ import java.util.List;
 @ExtendWith(SpringExtension.class)//@RunWith() // deprecated
 @DirtiesContext
 @AutoConfigureWebTestClient
-@ActiveProfiles("dev")
+//@ActiveProfiles("dev")
 public class MovieControllerTest  {
 
     @Autowired
@@ -41,7 +41,7 @@ public class MovieControllerTest  {
     public void updateMovie() {
         Flux<Movie> movieFlux = webTestClient.put().uri(baseUrl)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(new Movie(5, "Mortal Combat II")), Movie.class)
+                .body(Mono.just(new Movie("slslslsl", "Mortal Combat II")), Movie.class)
                 .exchange()
                 .expectStatus().isNoContent()
                 .returnResult(Movie.class)
@@ -61,6 +61,23 @@ public class MovieControllerTest  {
                 .expectStatus().isNotFound();
 
     }
+
+
+    @Test
+    @DisplayName("test endpoint /movie/title/{title} ")
+    public void getBytitle() {
+        Flux<Movie> flux = webTestClient.get().uri(baseUrl + "/title/{title}", "matrix")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_STREAM_JSON_VALUE)
+                .returnResult(Movie.class)
+                .getResponseBody();
+
+        StepVerifier.create(flux.log("get by title"))
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
 
     @Test
     @DisplayName("test endpoint /movie/{id} ")
@@ -137,7 +154,7 @@ public class MovieControllerTest  {
 
         StepVerifier.create(movieFlux.log("new Movie: "))
    // .expectNextCount(1)
-                .expectNextMatches(movie -> movie.getId() == 10 && movie.getName().equals("Mortal Combat"))
+                .expectNextMatches(movie -> movie.getId() == "10" && movie.getTitle().equals("Mortal Combat"))
                 .verifyComplete();
 
     }

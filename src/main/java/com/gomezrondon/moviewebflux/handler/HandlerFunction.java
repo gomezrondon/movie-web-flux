@@ -2,7 +2,7 @@ package com.gomezrondon.moviewebflux.handler;
 
 
 import com.gomezrondon.moviewebflux.entity.Movie;
-import com.gomezrondon.moviewebflux.service.MovieService;
+import com.gomezrondon.moviewebflux.service.MovieMongoService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
@@ -16,16 +16,15 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.time.Duration;
 
-import static org.springframework.web.reactive.function.BodyInserters.fromObject;
 
 
 @Component
 @Slf4j
 public class HandlerFunction {
 
-    private final MovieService service;
+    private final MovieMongoService service;
 
-    public HandlerFunction(MovieService service) {
+    public HandlerFunction(MovieMongoService service) {
         this.service = service;
     }
 
@@ -79,12 +78,12 @@ public class HandlerFunction {
                                     log.info("inside on Error Resume");
                                     return Mono.empty();
                                 })*/
-                        , Movie.class ).doOnError( e -> log.error("error message: {}",e.getMessage())) ;
+                        , Movie.class ).doOnError(e -> log.error("error message: {}",e.getMessage())) ;
     }
 
     @NotNull
     public Mono<ServerResponse> getMovieByID(ServerRequest serverRequest) {
-        return service.findById(Integer.parseInt(serverRequest.pathVariable("id")))
+        return service.findById(serverRequest.pathVariable("id"))
                 .flatMap(movie -> ServerResponse.ok().contentType(MediaType.APPLICATION_STREAM_JSON)
                         .body(BodyInserters.fromValue(movie)))
                // .switchIfEmpty(ServerResponse.notFound().build()); // simple response 404 Not Found

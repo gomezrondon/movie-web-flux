@@ -1,15 +1,16 @@
 package com.gomezrondon.moviewebflux.service;
 
-import com.gomezrondon.moviewebflux.entity.MovieMongo;
+
+import com.gomezrondon.moviewebflux.entity.Movie;
 import com.gomezrondon.moviewebflux.repository.RepositoryMongoMovies;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 
 @Service
-@Profile("mongo")
 public class MovieMongoServiceImp implements MovieMongoService {
 
     private final RepositoryMongoMovies repository;
@@ -19,29 +20,54 @@ public class MovieMongoServiceImp implements MovieMongoService {
     }
 
     @Override
-    public Flux<MovieMongo> findAll() {
+    public Flux<Movie> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public Mono<MovieMongo> findById(String id) {
-        return repository.findById(id).log(">>>findById: ");
+    public Mono<Movie> findById(String id) {
+        return repository.findById(id);
     }
 
     @Override
-    public Mono<MovieMongo> save(MovieMongo movie) {
+    public Mono<Movie> save(Movie movie) {
         return repository.save(movie);
     }
 
     @Override
-    public Mono<MovieMongo> insert(MovieMongo movie) {
+    public Mono<Movie> insert(Movie movie) {
         return repository.insert(movie);
+    }
+
+    @Override
+    public Mono<Void> update(Movie movie) {
+        return null;
+    }
+
+    @Override
+    public Mono<Void> delete(int id) {
+        return null;
     }
 
 
     @Override
     public Mono<Void> deleteAll() {
         return repository.deleteAll();
+    }
+
+    @Override
+    public Mono<Movie> findByTitle(String roboCop2) {
+        return repository.findByTitle(roboCop2).log("findByTitle:>> ");
+    }
+
+    @Override
+    public Flux<Movie> saveAll(List<Movie> movies) {
+        return null;
+    }
+
+    @Override
+    public Flux<Movie> saveAll(Flux<Movie> movies) {
+        return null;
     }
 
 

@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.relational.core.mapping.Table;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -19,18 +17,17 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @Builder
 @With
-@Table("movie")  // mysql
 public class Movie {
 
     @Id
-    private Integer id;
+    private String id;
 
     @NotNull
     @NotEmpty(message = "The name of the movie can not be empty")
-    private String name;
+    private String title;
 
     public Movie(String title) {
-        this.name = title;
+        this.title = title;
         this.id = null;
     }
 }

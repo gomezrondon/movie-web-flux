@@ -23,7 +23,7 @@ public class WebClientMovieClientIntegrationTest {
         Mono<Movie> movie = webClientMovieClient.movieByTitle("matrix");
 
         Assertions.assertNotNull(movie);
-        Assertions.assertTrue(movie.block().getName().equals("matrix"));
+        Assertions.assertTrue(movie.block().getTitle().equals("matrix"));
     }
 
 }
