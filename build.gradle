@@ -20,6 +20,10 @@ repositories {
 
 dependencies {
 
+	//mongo
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+
 	compile 'io.projectreactor.tools:blockhound:1.0.4.RELEASE'
 	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
