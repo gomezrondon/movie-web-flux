@@ -3,12 +3,12 @@ package com.gomezrondon.moviewebflux.configuration;
 
 import com.gomezrondon.moviewebflux.entity.ItemCapped;
 import com.gomezrondon.moviewebflux.entity.Movie;
+import com.gomezrondon.moviewebflux.entity.MovieMongo;
 import com.gomezrondon.moviewebflux.service.ItemService;
+import com.gomezrondon.moviewebflux.service.MovieMongoService;
 import com.gomezrondon.moviewebflux.service.MovieService;
-import io.r2dbc.spi.ConnectionFactory;
+
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +39,34 @@ public class ConfigApplication {
         };
     }
 
+//-------------- mongo Reactive --------------
 
+    @Bean
+    @Profile("mongo")
+    ApplicationRunner mongoApplicationRunner2(MovieMongoService service) {
+        return args -> {
+
+            Flux<MovieMongo> firstItem = insertMovieMongoFlux(service, List.of("Matrix"));
+
+            List<String> movieList = List.of( "Terminator", "RoboCop", "Alien II", "RoboCop2", "Batman Begins ", "Matrix 2", "Transformers", "Limitless");
+            Flux<MovieMongo> itemsFlux = insertMovieMongoFlux(service, movieList);
+
+            service.deleteAll()    // delete all records
+                    .thenMany(firstItem)             // guaranty to be the first
+                    .thenMany(itemsFlux)             // insert all records
+                    .thenMany(service.findAll())
+                    .subscribe(System.out::println);
+
+        };
+    }
+
+    @NotNull
+    private Flux<MovieMongo> insertMovieMongoFlux(MovieMongoService service, List<String> movieList) {
+        return Flux.fromIterable(movieList)
+                .map(String::toLowerCase)
+                .map(MovieMongo::new)
+                .flatMap(service::save);
+    }
 
     @Bean
     @Profile("mongo")
@@ -75,6 +102,7 @@ public class ConfigApplication {
     }
 
 
+    //---------------- mydql r2dbc -----------------
 
     @Bean
     @Profile("dev")
@@ -105,6 +133,9 @@ public class ConfigApplication {
 
         };
     }
+
+
+
 
     @NotNull
     private Flux<Movie> insertMovieFlux(MovieService service, List<String> movieList) {

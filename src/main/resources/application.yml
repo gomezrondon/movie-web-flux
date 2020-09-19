@@ -14,6 +14,8 @@ spring:
 ---
 spring:
   profiles: mongo
+  main:
+    allow-bean-definition-overriding: true
   r2dbc:
     url: r2dbc:mysql://localhost:3306/movie
     username: root
