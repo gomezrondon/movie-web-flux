@@ -1,0 +1,16 @@
+#run de db
+docker-compose up -d
+
+#repositorio de ejemplos
+https://github.com/spring-projects-experimental/spring-graalvm-native
+
+--------- with gradle
+https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/#build-image-example-builder-configuration
+gradle clean bootBuildImage
+
+// borrar images y forzar
+docker images | grep "none" | awk '{print $3}' | xargs docker rmi -f
+
+docker-compose -f docker-comp-app.yml up
+
+docker run -p 8080:8080 docker.io/library/movie-web-flux:0.0.1-SNAPSHOT
